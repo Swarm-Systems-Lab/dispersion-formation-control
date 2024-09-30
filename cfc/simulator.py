@@ -4,31 +4,42 @@
 
 import numpy as np
 
-
 # --------------------------------------------------------------------------------------
 
+# [!!] The calculations are not the most efficient, but these algorithms are thought to
+# be implemented in C in Paparazzi UAV.
 
-class simulator:
+
+class Simulator:
     def __init__(
-        self, p0: list[np.ndarray], Z: list[set], dt: float, lambda_d: np.ndarray = None
+        self,
+        p0: list[np.ndarray],
+        dt: float,
+        lambda_d: np.ndarray = None,
+        ke: float = 1,
     ):
 
         # Simulator settigns
-        self.Z = Z
-        self.N = self.p.shape[0]
+        self.N = p0.shape[0]
+
+        self.t0 = 0
         self.dt = dt
 
         # Controller settings
+        self.ke = ke
 
         # Simulator data
         self.variables = {
-            "t": 0,
+            "t": self.t0,
             "p": p0,
             "p_dot": np.zeros((self.N, 2)),
             "pc": np.zeros(2),
-            "C": np.zeros((self.N, 2, 2)),
-            "e": np.zeros((self.N, 2)),
+            "C": np.zeros((2, 2)),
+            "e": np.zeros(2),
+            "lambda": np.zeros(2),
             "lambda_d": np.zeros(2),
+            "v1": np.zeros(2),
+            "v2": np.zeros(2),
         }
 
         if lambda_d is not None:
@@ -44,53 +55,90 @@ class simulator:
         for key in self.variables.keys():
             self.data[key].append(np.copy(self.variables[key]))
 
+    def calculate_centroid(self):
+        """
+        Centralized calculation of the centroid
+        """
+        pc = np.sum(self.variables["p"], axis=0) / self.N
+
+        # ------------------------------
+        # Update simulator data
+        self.variables["pc"] = pc
+        # ------------------------------
+
+    def calculate_covariance(self):
+        """
+        Centralized calculation of the covariance matrix
+        """
+        p_pc = self.variables["p"] - self.variables["pc"]
+        C = p_pc.T @ p_pc / (self.N - 1)
+
+        # ------------------------------
+        # Update simulator data
+        for i in range(self.N):
+            self.variables["C"] = C
+        # ------------------------------
+
     def cfc(self):
         """
         Cloud-based formation control
         """
 
-        # This calculation is not the most efficient, but this is the algorithm that
-        # should be implemented in a real robot platform
+        [pcx, pcy] = self.variables["pc"]
+        lambda_d1 = self.variables["lambda_d"][0]
+        lambda_d2 = self.variables["lambda_d"][1]
 
-        pc = np.sum(self.variables["p"], axis=0)/self.N
-        pcx, pcy = pc
+        flag = self.variables["t"] > self.t0
+
+        C = self.variables["C"]
+        [lambda1, lambda2], [[v1x, v1y], [v2x, v2y]] = np.linalg.eig(C)
+
+        e1 = lambda1 - lambda_d1
+        e2 = lambda2 - lambda_d2
 
         for i in range(self.N):
             # Get data
-            C = self.variables["C"][i, :, :]
-            lambda_d1 = self.variables["lambda_d"][0]
-            lambda_d2 = self.variables["lambda_d"][1]
+            px = self.variables["p"][i, 0]
+            py = self.variables["p"][i, 1]
 
+            # ------------------------------
             # Algorithm
-            [lambda1, lambda2], [[v1x, v1y], [v2x, v2y]] = np.linalg.eig(C)
+            zx = px - pcx
+            zy = py - pcy
 
-            e1 = lambda1 - lambda_d1
-            e2 = lambda2 - lambda_d2
+            if flag:
+                [v1x, v1y] = self.variables["v1"]
+                [v2x, v2y] = self.variables["v2"]
 
-            eta1 = v1x*
-            eta2 =
+            eta1 = v1x * zx + v1y * zy
+            eta2 = v2x * zx + v2y * zy
 
-            # ------------------------------
+            ux = -self.ke * (e1 * eta1 * v1x + e2 * eta2 * v2x)
+            uy = -self.ke * (e1 * eta1 * v1y + e2 * eta2 * v2y)
+
+            # ----------------------------------
             # Update simulator data
-            self.variables["pc"] = pc
-            self.variables["e"][i, :, :] = [e1, e2]
-            # ------------------------------
-
-        return p_dot
+            self.variables["p_dot"][i, :] = [ux, uy]
+        self.variables["e"] = [e1, e2]
+        self.variables["v1"] = [v1x, v1y]
+        self.variables["v2"] = [v2x, v2y]
+        self.variables["lambda"] = [lambda1, lambda2]
+        # ----------------------------------
 
     def int_euler(self):
         """
         Funtion to integrate the simulation step by step using Euler
         """
+        # Calculate the centroid and the covariance matrix
+        self.calculate_centroid()
+        self.calculate_covariance()
 
         # Compute the GVF omega control law
-        self.p_dot = self.cfc()
+        self.cfc()
 
-        # Integrate
-        p_dot = self.v
-
-        self.t = self.t + self.dt
-        self.p = self.p + p_dot * self.dt
+        # Integrate (single integrator dynamics)
+        self.variables["t"] = self.variables["t"] + self.dt
+        self.variables["p"] = self.variables["p"] + self.dt * self.variables["p_dot"]
 
         # Update output data
         self.update_data()

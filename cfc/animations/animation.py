@@ -20,19 +20,14 @@ from matplotlib.animation import FuncAnimation
 # -------------------------------------------------------------------------------------
 
 # Swarm Systems Lab PySimUtils
-from ssl_pysimutils import unicycle_patch
-
-
-# Import the GVF-IK simulator
-from ..gvf_traj.gvf_traj import gvf_traj
+from ssl_pysimutils import config_data_axis, vector2d
 
 # -------------------------------------------------------------------------------------
 
 
-class AnimationXY:
+class Animation:
     def __init__(
         self,
-        gvf_traj: gvf_traj,
         data,
         fps=None,
         dpi=100,
@@ -40,21 +35,20 @@ class AnimationXY:
         xlims=None,
         ylims=None,
         anim_tf=None,
+        kw_alphainit=0.8,
         kw_color="royalblue",
-        kw_sz=7,
-        kw_lw=0.5,
-        kw_alphainit=0.5,
+        tail_frames=2000,
         tail_lw=1,
-        tail_frames=500,
     ):
 
-        self.gvf_traj = gvf_traj
-
         # Collect some data
-        self.tdata = np.array(data["t"])
-        self.xdata = np.array(data["p"])[:, 0, 0]
-        self.ydata = np.array(data["p"])[:, 0, 1]
-        self.thetadata = np.array(data["theta"])[:, 0]
+        self.t_data = np.array(data["t"])
+        self.p_data = np.array(data["p"])
+        self.pc_data = np.array(data["pc"])
+        self.e_data = np.array(data["e"])
+        self.u_data = np.array(data["p_dot"])
+        self.v1_data = np.array(data["v1"])
+        self.v2_data = np.array(data["v2"])
 
         # Animation fps and frames
         if anim_tf is None:
@@ -69,66 +63,85 @@ class AnimationXY:
             self.fps = fps
         self.anim_frames = int(anim_tf / dt)
 
+        self.anim_frames += self.wait_its
+
         # -----------------------------------------------------------------------------
         # Initialize the plot and axis configuration
         self.fig = plt.figure(dpi=dpi, figsize=figsize)
-
-        self.ax = self.fig.subplots()
+        grid = plt.GridSpec(3, 5, hspace=0.3, wspace=0.6)
+        ax_main = self.fig.add_subplot(grid[:, 0:3])
+        ax_data1 = self.fig.add_subplot(grid[0, 3:5])
+        ax_data2 = self.fig.add_subplot(grid[1, 3:5])
+        ax_data3 = self.fig.add_subplot(grid[2, 3:5])
 
         if xlims is not None:
-            self.ax.set_xlim(xlims)
+            ax_main.set_xlim(xlims)
         if ylims is not None:
-            self.ax.set_ylim(ylims)
+            ax_main.set_ylim(ylims)
 
-        self.ax.set_xlabel(r"$X$ [L]")
-        self.ax.set_ylabel(r"$Y$  [L]")
-        self.ax.set_aspect("equal")
-        self.ax.xaxis.set_major_locator(ticker.MultipleLocator(50))
-        self.ax.xaxis.set_minor_locator(ticker.MultipleLocator(50 / 4))
-        self.ax.yaxis.set_major_locator(ticker.MultipleLocator(50))
-        self.ax.yaxis.set_minor_locator(ticker.MultipleLocator(50 / 4))
-        self.ax.grid(True)
+        ax_main.set_xlabel(r"$X$ [L]")
+        ax_main.set_ylabel(r"$Y$  [L]")
+        ax_main.set_aspect("equal")
+        config_data_axis(ax_main, 2.5, 2.5, False)
 
-        self.kw_patch = {"color": kw_color, "size": kw_sz, "lw": kw_lw}
+        ax_data1.set_xlabel(r"$t$ [T]")
+        ax_data1.set_ylabel(r"$\|e_\lambda\|^2$")
+        config_data_axis(ax_data1, 0.5, 25)
+
+        ax_data2.set_ylabel(r"$a$")
+        config_data_axis(ax_data2, 0.5, 5)
+
+        ax_data3.set_xlabel(r"$t$ [T]")
+        ax_data3.set_ylabel(r"$a$")
+        config_data_axis(ax_data3, 0.5, 5)
+
+        # xmin, xmax = np.min([-0.2, np.min(self.tdata) - 0.2]), np.max(
+        #     [0.2, np.max(self.tdata) + 0.2]
+        # )
+        # ymin, ymax = np.min([-1, np.min(self.phidata) - 1]), np.max(
+        #     [1, np.max(self.phidata) + 1]
+        # )
+        # self.ax_phi.set_xlim([xmin, xmax])
+        # self.ax_phi.set_ylim([ymin, ymax])
+
         self.tail_frames = tail_frames
 
         # -----------------------------------------------------------------------------
-        # Draw the trajectory the level set
-        self.gvf_traj.draw(self.fig, self.ax, lw=1.4, draw_field=False)
-
         # Initialize agent's icon
-        icon_init = unicycle_patch(
-            [self.xdata[0], self.ydata[0]], self.thetadata[0], **self.kw_patch
-        )
-        self.agent_icon = unicycle_patch(
-            [self.xdata[0], self.ydata[0]], self.thetadata[0], **self.kw_patch
-        )
+        icon_init = None
+        self.agent_icon = None
 
         icon_init.set_alpha(kw_alphainit)
         self.agent_icon.set_zorder(10)
 
-        # self.ax.add_patch(icon_init)
-        self.ax.add_patch(self.agent_icon)
+        ax_main.add_patch(icon_init)
+        ax_main.add_patch(self.agent_icon)
 
         # Initialize agent's tail
-        (self.agent_line,) = self.ax.plot(
-            self.xdata[0],
-            self.ydata[0],
-            c=kw_color,
-            ls="-",
-            lw=tail_lw,
-            alpha=0.7,
+        (self.agent_line,) = ax_main.plot(
+            self.xdata[0], self.ydata[0], c=kw_color, ls="-", lw=tail_lw
         )
-        # -----------------------------------------------------------------------------
 
-    def animate(self, i):
+        # -----------------------------------------------------------------------------
+        # Draw data 1 line
+        self.ax_phi.axhline(0, color="k", ls="-", lw=1)
+        # (self.line_phi,) = self.ax_phi.plot(0, self.phidata[0], lw=1.4, zorder=8)
+
+        # -----------------------------------------------------------------------------
+        self.ax_main = ax_main
+        self.ax_data1 = ax_data1
+        self.ax_data2 = ax_data2
+        self.ax_data3 = ax_data3
+
+    def animate(self, iframe):
+
+        i = iframe
+
         # Update the icon
         self.agent_icon.remove()
-        self.agent_icon = unicycle_patch(
-            [self.xdata[i], self.ydata[i]], self.thetadata[i], **self.kw_patch
-        )
+        self.agent_icon = None
         self.agent_icon.set_zorder(10)
-        self.ax.add_patch(self.agent_icon)
+        self.ax_main.add_patch(self.agent_icon)
 
         # Update the tail
         if i > self.tail_frames:
@@ -139,14 +152,13 @@ class AnimationXY:
         else:
             self.agent_line.set_data(self.xdata[0:i], self.ydata[0:i])
 
+        # Update data
+        # self.line_phi.set_data(self.tdata[0:i], self.phidata[0:i])
+
     def gen_animation(self):
         """
         Generate the animation object.
         """
-
-        self.wait_state = 0
-        self.waited_its = 0
-        self.last_i = 0
 
         print("Simulating {0:d} frames... \nProgress:".format(self.anim_frames))
         anim = FuncAnimation(
