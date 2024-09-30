@@ -83,28 +83,28 @@ def plot_resilience(
     vector2d(
         ax_main,
         pc_data[0],
-        np.array(v1_data[0, 0, :]) * lambda_data[1, 0, 0],
+        np.array(v1_data[0, :]) * lambda_data[1, 0],
         **kw_arr_g,
         c="k"
     )
     vector2d(
         ax_main,
         pc_data[0],
-        np.array(v2_data[0, 0, :]) * lambda_data[1, 0, 1],
+        np.array(v2_data[0, :]) * lambda_data[1, 1],
         **kw_arr_g,
         c="k"
     )
     vector2d(
         ax_main,
         pc_data[0],
-        np.array(v1_data[-1, 0, :]) * lambda_data[-1, 0, 0],
+        np.array(v1_data[-1, :]) * lambda_data[-1, 0],
         **kw_arr_r,
         c="darkred"
     )
     vector2d(
         ax_main,
         pc_data[0],
-        np.array(v2_data[-1, 0, :]) * lambda_data[-1, 0, 1],
+        np.array(v2_data[-1, :]) * lambda_data[-1, 1],
         **kw_arr_r,
         c="darkred"
     )
@@ -120,15 +120,15 @@ def plot_resilience(
     ax_data2.plot(t_data, p_data[:, :-4, 0], colors[0], alpha=0.2)
     ax_data2.plot(t_data, p_data[:, :-4, 1], colors[2], alpha=0.2)
 
-    ax_data2.plot(t_data, p_data[:, -4:-1, 0], colors[0], alpha=0.8)
-    ax_data2.plot(t_data, p_data[:, -4:-1, 1], colors[2], alpha=0.8)
+    ax_data2.plot(t_data, p_data[:, -4:-1, 0], colors[0], alpha=0.8, lw=1)
+    ax_data2.plot(t_data, p_data[:, -4:-1, 1], colors[2], alpha=0.8, lw=1)
 
     ax_data2.plot([None], [None], colors[0], label=r"$p_i^X$")
     ax_data2.plot([None], [None], colors[2], label=r"$p_i^Y$")
     ax_data2.legend(fancybox=True, prop={"size": 10}, ncols=2, loc="upper right")
 
     # ------------------------------
-    # DATA AXIS 2
+    # DATA AXIS 3
     c_list = [C_data[:, 0, 0], C_data[:, 0, 1], C_data[:, 1, 1]]
     ax_data3.set_ylim([np.min(c_list) - 1, np.max(c_list) + 6])
 

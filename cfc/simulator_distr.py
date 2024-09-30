@@ -19,7 +19,7 @@ def dyn_dual(xhat, t, L, x, k=1):
 # --------------------------------------------------------------------------------------
 
 # [!!] The calculations are not the most efficient, but these algorithms are thought to
-# be implemented in C in Paparazzi UAV.
+# be implemented in C into Paparazzi UAV.
 
 
 class SimulatorDistr:
@@ -210,6 +210,12 @@ class SimulatorDistr:
 
             [lambda1, lambda2], [[v1x, v1y], [v2x, v2y]] = np.linalg.eig(C)
 
+            # The numerical error of the algorithm used to calculate the
+            # eigenvectors higly increases around the degenerate cases. And this
+            # error causes the algorithm to diverge. However, we have proved the
+            # invariance of the eigenvectors in the Proposition 2 of the paper.
+            # Therefore, we compute the eigenvectors in the first iteration and
+            # store them for the rest of the simulation.
             if flag:
                 [v1x, v1y] = self.variables["v1"][i, :]
                 [v2x, v2y] = self.variables["v2"][i, :]
