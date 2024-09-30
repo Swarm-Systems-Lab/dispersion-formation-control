@@ -20,7 +20,7 @@ python install.py
 
 ## Usage
 
-For an overview of the project's structure and to see the code in action, we recommend running the Jupyter notebook `cfc.ipynb` located in the `notebooks` directory.
+For an overview of the project's structure and to see the code in action, we recommend running the Jupyter notebook `cfc_sim.ipynb` located in the `notebooks` directory.
 
 ## Credits
 
