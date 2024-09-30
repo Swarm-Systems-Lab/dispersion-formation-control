@@ -2,7 +2,7 @@
 
     @misc{jinchen2024cloudformationcontrol,
       title={Cloud Formation Control: from Geometry to Distribution}, 
-      author={Jesus Bautista and Hector Garcia de Marina},
+      author={Jin Chen, Hector Garcia de Marina, Bayu Jayawardhana, Jesus Bautista Villar},
       year={2024},
       url={}, 
     }
