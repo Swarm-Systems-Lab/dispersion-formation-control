@@ -66,11 +66,11 @@ def plot_distributed(
     config_data_axis(ax_data1, 0.5, 20)
 
     ax_data2.set_ylim([-1, lim])
-    ax_data2.set_ylabel(r"[L]")
+    ax_data2.set_ylabel(r"$\hat{p}_c^i$ [L]")
     config_data_axis(ax_data2, 0.5, 2.5)
 
     ax_data3.set_xlabel(r"$t$ [T]")
-    ax_data3.set_ylabel(r"[L$^2$]")
+    ax_data3.set_ylabel(r"$\hat{c}_k^i$ [L$^2$]")
     config_data_axis(ax_data3, 0.5, 5)
 
     # ------------------------------
@@ -118,6 +118,20 @@ def plot_distributed(
         c="darkred"
     )
 
+    ax_main.text(
+        v1_data[-1, 0, 0] * lambda_data[-1, 0, 0],
+        v1_data[-1, 0, 1] * lambda_data[-1, 0, 0],
+        r"$u_1$",
+        c="darkred",
+    )
+
+    ax_main.text(
+        v2_data[-1, 0, 0] * lambda_data[-1, 0, 1],
+        v2_data[-1, 0, 1] * lambda_data[-1, 0, 1],
+        r"$u_2$",
+        c="darkred",
+    )
+
     # ------------------------------
     # DATA AXIS 1
     ax_data1.axhline(0, color="k", ls="-", lw=1)
@@ -129,14 +143,14 @@ def plot_distributed(
     ax_data2.plot(t_data, pc_data[:, :, 0], colors[0], alpha=0.2)
     ax_data2.plot(t_data, pc_data[:, :, 1], colors[2], alpha=0.2)
 
-    ax_data2.plot([None], [None], colors[0], label=r"$p_c^X$")
-    ax_data2.plot([None], [None], colors[2], label=r"$p_c^Y$")
+    ax_data2.plot([None], [None], colors[0], label=r"$\hat{p}_c^X$")
+    ax_data2.plot([None], [None], colors[2], label=r"$\hat{p}_c^Y$")
     ax_data2.legend(fancybox=True, prop={"size": 10}, ncols=1, loc="upper right")
 
     # Create the inset axis with a consensus iteration
     ax_inset2 = inset_axes(ax_data2, width="60%", height="40%", loc="upper left")
 
-    ax_inset2.set_xlabel(r"$t$ [mT]")
+    ax_inset2.set_xlabel(r"[mT]")
     ax_inset2.xaxis.set_label_coords(1.12, -0.16)
     config_data_axis(ax_inset2, 1, 2)
 
@@ -154,15 +168,15 @@ def plot_distributed(
     ax_data3.plot(t_data, C_data[:, :, 0, 1], colors[1], alpha=0.05)
     ax_data3.plot(t_data, C_data[:, :, 1, 1], colors[2], alpha=0.05)
 
-    ax_data3.plot(t_data, C_data[:, 0, 0, 0] - 100, colors[0], label=r"$c_1^i$")
-    ax_data3.plot(t_data, C_data[:, 0, 0, 1] - 100, colors[1], label=r"$c_2^i$")
-    ax_data3.plot(t_data, C_data[:, 0, 1, 1] - 100, colors[2], label=r"$c_3^i$")
+    ax_data3.plot(t_data, C_data[:, 0, 0, 0] - 100, colors[0], label=r"$\hat c_1$")
+    ax_data3.plot(t_data, C_data[:, 0, 0, 1] - 100, colors[1], label=r"$\hat c_2$")
+    ax_data3.plot(t_data, C_data[:, 0, 1, 1] - 100, colors[2], label=r"$\hat c_3$")
     ax_data3.legend(fancybox=True, prop={"size": 10}, ncols=1, loc="upper right")
 
     # Create the inset axis with a consensus iteration
     ax_inset3 = inset_axes(ax_data3, width="60%", height="40%", loc="upper left")
 
-    ax_inset3.set_xlabel(r"$t$ [mT]")
+    ax_inset3.set_xlabel(r"[mT]")
     ax_inset3.xaxis.set_label_coords(1.12, -0.16)
     config_data_axis(ax_inset3, 1, 2)
 

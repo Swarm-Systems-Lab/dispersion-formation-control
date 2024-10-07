@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 from ssl_pysimutils import config_data_axis, vector2d, set_paper_parameters
 
 
-def plot_resilience(
+def plot_resilience_small(
     sim,
     lim=11,
     li=None,
@@ -35,16 +35,13 @@ def plot_resilience(
     v2_data = np.array(sim.data["v2"])
     lambda_data = np.array(sim.data["lambda"])
 
-    C_data = np.array(sim.data["C"])
-
     # ------------------------------
     # Initialise the figure + axes
     fig = plt.figure(dpi=dpi, figsize=figsize)
-    grid = plt.GridSpec(3, 5, hspace=0.3, wspace=0.1)
+    grid = plt.GridSpec(2, 5, hspace=0.3, wspace=0.1)
     ax_main = fig.add_subplot(grid[:, 0:3])
     ax_data1 = fig.add_subplot(grid[0, 3:5])
     ax_data2 = fig.add_subplot(grid[1, 3:5])
-    ax_data3 = fig.add_subplot(grid[2, 3:5])
 
     # Configure the axes
     ax_main.set_xlim([-lim, lim])
@@ -59,11 +56,8 @@ def plot_resilience(
     config_data_axis(ax_data1, t_sep, 15)
 
     ax_data2.set_ylabel(r"$p_i$ [L]")
+    ax_data2.set_xlabel(r"$t$ [T]")
     config_data_axis(ax_data2, t_sep, 2.5)
-
-    ax_data3.set_xlabel(r"$t$ [T]")
-    ax_data3.set_ylabel(r"[L$^2$]")
-    config_data_axis(ax_data3, t_sep, 3)
 
     # ------------------------------
     # MAIN AXIS
@@ -112,14 +106,14 @@ def plot_resilience(
     ax_main.text(
         v1_data[-1, 0] * lambda_data[-1, 0],
         v1_data[-1, 1] * lambda_data[-1, 0],
-        r"$u_1$",
+        r"$v_1$",
         c="darkred",
     )
 
     ax_main.text(
         v2_data[-1, 0] * lambda_data[-1, 1],
         v2_data[-1, 1] * lambda_data[-1, 1],
-        r"$u_2$",
+        r"$v_2$",
         c="darkred",
     )
 
@@ -131,8 +125,8 @@ def plot_resilience(
     # ------------------------------
     # DATA AXIS 2
     ax_data2.axhline(0, color="k", ls="-", lw=1)
-    ax_data2.plot(t_data, p_data[:, :-4, 0], colors[0], alpha=0.15)
-    ax_data2.plot(t_data, p_data[:, :-4, 1], colors[2], alpha=0.15)
+    ax_data2.plot(t_data, p_data[:, :-4, 0], colors[0], alpha=0.2)
+    ax_data2.plot(t_data, p_data[:, :-4, 1], colors[2], alpha=0.2)
 
     ax_data2.plot(t_data, p_data[:, -4:-1, 0], colors[0], alpha=0.8, lw=1)
     ax_data2.plot(t_data, p_data[:, -4:-1, 1], colors[2], alpha=0.8, lw=1)
@@ -140,17 +134,6 @@ def plot_resilience(
     ax_data2.plot([None], [None], colors[0], label=r"$p^X$")
     ax_data2.plot([None], [None], colors[2], label=r"$p^Y$")
     ax_data2.legend(fancybox=True, prop={"size": 10}, ncols=2, loc="upper right")
-
-    # ------------------------------
-    # DATA AXIS 3
-    c_list = [C_data[:, 0, 0], C_data[:, 0, 1], C_data[:, 1, 1]]
-    ax_data3.set_ylim([np.min(c_list) - 1, np.max(c_list) + 6])
-
-    ax_data3.axhline(0, color="k", ls="-", lw=1)
-    ax_data3.plot(t_data, C_data[:, 0, 0], label=r"$c_1$", c=colors[0])
-    ax_data3.plot(t_data, C_data[:, 0, 1], label=r"$c_2$", c=colors[1])
-    ax_data3.plot(t_data, C_data[:, 1, 1], label=r"$c_3$", c=colors[2])
-    ax_data3.legend(fancybox=True, prop={"size": 10}, ncols=3, loc="upper left")
 
     # Plot it!
     plt.show()
