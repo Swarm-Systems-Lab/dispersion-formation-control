@@ -71,7 +71,7 @@ def plot_distributed(
 
     ax_data3.set_xlabel(r"$t$ [T]")
     ax_data3.set_ylabel(r"$\hat{c}_k^i$ [L$^2$]")
-    config_data_axis(ax_data3, 0.5, 5)
+    config_data_axis(ax_data3, 0.5, 10)
 
     # ------------------------------
     # MAIN AXIS

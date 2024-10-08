@@ -36,6 +36,7 @@ def plot_resilience(
     lambda_data = np.array(sim.data["lambda"])
 
     C_data = np.array(sim.data["C"])
+    N = p_data.shape[1]
 
     # ------------------------------
     # Initialise the figure + axes
@@ -50,8 +51,8 @@ def plot_resilience(
     ax_main.set_xlim([-lim, lim])
     ax_main.set_ylim([-lim, lim])
 
-    ax_main.set_xlabel(r"$X$ [L]")
-    ax_main.set_ylabel(r"$Y$  [L]")
+    ax_main.set_xlabel(r"$p_x$ [L]")
+    ax_main.set_ylabel(r"$p_y$  [L]")
     ax_main.set_aspect("equal")
     config_data_axis(ax_main, 2.5, 2.5, False)
 
@@ -131,11 +132,11 @@ def plot_resilience(
     # ------------------------------
     # DATA AXIS 2
     ax_data2.axhline(0, color="k", ls="-", lw=1)
-    ax_data2.plot(t_data, p_data[:, :-4, 0], colors[0], alpha=0.15)
-    ax_data2.plot(t_data, p_data[:, :-4, 1], colors[2], alpha=0.15)
+    ax_data2.plot(t_data, p_data[:, : N - 4, 0], colors[0], alpha=0.15)
+    ax_data2.plot(t_data, p_data[:, : N - 4, 1], colors[2], alpha=0.15)
 
-    ax_data2.plot(t_data, p_data[:, -4:-1, 0], colors[0], alpha=0.8, lw=1)
-    ax_data2.plot(t_data, p_data[:, -4:-1, 1], colors[2], alpha=0.8, lw=1)
+    ax_data2.plot(t_data, p_data[:, N - 4 : N, 0], colors[0], alpha=0.8, lw=1)
+    ax_data2.plot(t_data, p_data[:, N - 4 : N, 1], colors[2], alpha=0.8, lw=1)
 
     ax_data2.plot([None], [None], colors[0], label=r"$p^X$")
     ax_data2.plot([None], [None], colors[2], label=r"$p^Y$")
