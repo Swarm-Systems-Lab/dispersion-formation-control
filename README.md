@@ -1,14 +1,14 @@
-# Cloud Formation Control: from Geometry to Distribution
+# Dispersion Formation Control: from Geometry to Distribution
 
     @misc{jinchen2024cloudformationcontrol,
-      title={Cloud Formation Control: from Geometry to Distribution}, 
+      title={Dispersion Formation Control: from Geometry to Distribution}, 
       author={Jin Chen, Hector Garcia de Marina, Bayu Jayawardhana, Jesus Bautista Villar},
       year={2024},
       url={}, 
     }
 
 ## Features
-This project includes a centralized and distribution implementation of our Cloud Formation Control algorithm.
+This project includes a centralized and distribution implementation of our Dispersion Formation Control algorithm.
 
 ## Quick Install
 
