@@ -2,7 +2,7 @@
 
     @misc{jinchen2024cloudformationcontrol,
       title={Dispersion Formation Control: from Geometry to Distribution}, 
-      author={Jin Chen, Hector Garcia de Marina, Bayu Jayawardhana, Jesus Bautista Villar},
+      author={Jin Chen, Hector Garcia de Marina, Jesus Bautista Villar, Bayu Jayawardhana},
       year={2024},
       url={}, 
     }
@@ -20,7 +20,7 @@ python install.py
 
 ## Usage
 
-For an overview of the project's structure and to see the code in action, we recommend running the Jupyter notebook `cfc_sim.ipynb` located in the `notebooks` directory.
+For an overview of the project's structure and to see the code in action, we recommend running the Jupyter notebook `simulations.ipynb` located in the `notebooks` directory.
 
 ## Credits
 
