@@ -121,14 +121,14 @@ def plot_distributed(
     ax_main.text(
         v1_data[-1, 0, 0] * lambda_data[-1, 0, 0],
         v1_data[-1, 0, 1] * lambda_data[-1, 0, 0],
-        r"$u_1$",
+        r"$l_1$",
         c="darkred",
     )
 
     ax_main.text(
-        v2_data[-1, 0, 0] * lambda_data[-1, 0, 1],
-        v2_data[-1, 0, 1] * lambda_data[-1, 0, 1],
-        r"$u_2$",
+        v2_data[-1, 0, 0] * lambda_data[-1, 0, 1] + 0.5,
+        v2_data[-1, 0, 1] * lambda_data[-1, 0, 1] + 0.5,
+        r"$l_2$",
         c="darkred",
     )
 

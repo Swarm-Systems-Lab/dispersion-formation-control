@@ -113,14 +113,14 @@ def plot_resilience(
     ax_main.text(
         v1_data[-1, 0] * lambda_data[-1, 0],
         v1_data[-1, 1] * lambda_data[-1, 0],
-        r"$u_1$",
+        r"$l_1$",
         c="darkred",
     )
 
     ax_main.text(
         v2_data[-1, 0] * lambda_data[-1, 1],
         v2_data[-1, 1] * lambda_data[-1, 1],
-        r"$u_2$",
+        r"$l_2$",
         c="darkred",
     )
 

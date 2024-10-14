@@ -14,6 +14,7 @@ from matplotlib.animation import PillowWriter
 
 # Swarm Systems Lab PySimUtils
 from ssl_pysimutils import createDir, uniform_distrib, gen_Z_random, R_2D_matrix
+from ssl_pysimutils import set_paper_parameters
 
 # Python project directory to path
 file_path = os.path.dirname(__file__)
@@ -22,11 +23,12 @@ if module_path not in sys.path:
     sys.path.append(module_path)
 
 # Import simulators, plots and animations
-from cfc import Simulator, SimulatorDistr
-from cfc.plots import plot_centralized, plot_distributed, plot_resilience
-from cfc.plots import plot_distributed_small, plot_resilience_small
-from cfc.animations import AnimBasic
+from dfc import Simulator, SimulatorDistr
+from dfc.plots import plot_centralized, plot_distributed, plot_resilience
+from dfc.plots import plot_distributed_small, plot_resilience_small
+from dfc.animations import AnimBasic
 
 # --------------------------------------------------------------------------------------
 
-print("Test successful!")
+if __name__ == "__main__":
+    print("All dependencies are correctly installed!")
