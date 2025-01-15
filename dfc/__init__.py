@@ -4,3 +4,4 @@
 
 from .simulator import *
 from .simulator_distr import *
+from .simulator_distr_new import *

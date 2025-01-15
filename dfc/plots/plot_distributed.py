@@ -40,9 +40,9 @@ def plot_distributed(
     itc = int(tc / sim.dt)
     pcx_log = np.array(sim.data["pc_log"])[itc, :, :, 0]
     pcy_log = np.array(sim.data["pc_log"])[itc, :, :, 1]
-    c1_log_data = np.array(sim.data["c_log"])[itc, :, :, 0]
-    c2_log_data = np.array(sim.data["c_log"])[itc, :, :, 1]
-    c3_log_data = np.array(sim.data["c_log"])[itc, :, :, 2]
+    c1_log_data = np.array(sim.data["C_log"])[itc, :, :, 0]
+    c2_log_data = np.array(sim.data["C_log"])[itc, :, :, 1]
+    c3_log_data = np.array(sim.data["C_log"])[itc, :, :, 2]
 
     # ------------------------------
     # Initialise the figure + axes

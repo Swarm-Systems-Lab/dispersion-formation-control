@@ -80,9 +80,9 @@ class Simulator:
             self.variables["C"] = C
         # ------------------------------
 
-    def cfc(self):
+    def control_dfc(self):
         """
-        Cloud-based formation control
+        Dispersion-based formation control
         """
 
         [pcx, pcy] = self.variables["pc"]
@@ -146,8 +146,8 @@ class Simulator:
         self.calculate_centroid()
         self.calculate_covariance()
 
-        # Compute the GVF omega control law
-        self.cfc()
+        # Compute the control law
+        self.control_dfc()
 
         # Integrate (single integrator dynamics)
         self.variables["t"] = self.variables["t"] + self.dt

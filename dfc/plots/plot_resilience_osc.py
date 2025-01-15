@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 from ssl_pysimutils import config_data_axis, vector2d, set_paper_parameters
 
 
-def plot_resilience(
+def plot_resilience_osc(
     sim,
     lim=11,
     li=None,
@@ -21,7 +21,6 @@ def plot_resilience(
     colors=["royalblue", "darkgreen", "darkred"],
     t_sep=0.5,
 ):
-
     # Configure matplotlib for paper figures --
     set_paper_parameters()
 

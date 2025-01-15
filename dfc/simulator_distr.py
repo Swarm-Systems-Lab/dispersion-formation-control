@@ -18,9 +18,8 @@ def dyn_dual(xhat, t, L, x, k=1):
 
 # --------------------------------------------------------------------------------------
 
-# [!!] The calculations are not the most efficient, but these algorithms are thought to
-# be implemented in C into Paparazzi UAV.
-
+# [!!] Calculations aren't very efficient, but these algorithms are first implemented 
+# in Python for simulations and then ported to C for experiments in Paparazzi UAV
 
 class SimulatorDistr:
     def __init__(
@@ -38,7 +37,12 @@ class SimulatorDistr:
 
         # Simulator settigns
         self.N = p0.shape[0]
-        self.set_Z(Z)
+        self.Z = Z
+        self.status = np.ones(self.N)
+        
+        # Generate the initial incidence and Laplacian matrices 
+        self.B = build_B(self.Z, self.N)
+        self.update_laplacian()
 
         # Integrator and ED solver parameters
         self.it = 0
@@ -66,7 +70,7 @@ class SimulatorDistr:
             "C": np.zeros((self.N, 2, 2)),
             "Ci": np.zeros((self.N, 2, 2)),
             "C_comp": np.zeros((2, 2)),
-            "c_log": np.zeros((len(self.tc), self.N, 3)),
+            "C_log": np.zeros((len(self.tc), self.N, 3)),
             "e": np.zeros((self.N, 2)),
             "lambda_d": np.zeros(2),
             "lambda": np.zeros((self.N, 2)),
@@ -80,15 +84,10 @@ class SimulatorDistr:
         # Data dictionary (stores the data from each step of the simulation)
         self.data = {s: [] for s in self.variables.keys()}
 
-    def set_Z(self, Z):
+    def update_laplacian(self):
         """
-        Set the new Z and build the Laplacian matrix
+        Build the Laplacian matrix based on Z and the status of the robots
         """
-        self.Z = Z
-
-        # Generate the incidence matrix
-        self.B = build_B(Z, self.N)
-
         # Generate the Laplacian matrix
         self.L = build_L_from_B(self.B)
         self.Lb = np.kron(self.L, np.eye(2))
@@ -103,6 +102,18 @@ class SimulatorDistr:
         """
         for key in self.variables.keys():
             self.data[key].append(np.copy(self.variables[key]))
+
+    def kill_agent(self, agents_id):
+        """
+        Change the status of the listed agents to dead and remove their connections
+        from the incidence matrix B
+        """
+        # Uptate the agents' status and remove connections
+        self.status[agents_id] = 0
+        self.B[:, np.argwhere(self.B[agents_id,:] != 0).squeeze()] = 0
+
+        # Update the Laplacian matrix with the new incidence matrix B
+        self.update_laplacian()
 
     def calculate_centroid(self):
         """
@@ -141,7 +152,7 @@ class SimulatorDistr:
                     Ni += 1
 
             if Ni > 0:
-                Ci = Ci * self.N / Ni / (self.N - 1)
+                Ci = Ci / Ni
 
             self.variables["Ci"][i, :, :] = Ci
 
@@ -177,17 +188,17 @@ class SimulatorDistr:
             )
             self.variables["C"][i, :, :] = C
 
-        self.variables["c_log"][:, :, 0] = c1_hat_log
-        self.variables["c_log"][:, :, 1] = c2_hat_log
-        self.variables["c_log"][:, :, 2] = c3_hat_log
+        self.variables["C_log"][:, :, 0] = c1_hat_log
+        self.variables["C_log"][:, :, 1] = c2_hat_log
+        self.variables["C_log"][:, :, 2] = c3_hat_log
 
         # Centralized algorithm
         p_pc = self.variables["p"] - self.variables["pc_comp"]
         self.variables["C_comp"] = p_pc.T @ p_pc / (self.N - 1)
 
-    def cfc(self):
+    def control_dfc(self):
         """
-        Cloud-based formation control
+        Dispersion-based formation control
         """
 
         lambda_d1 = self.variables["lambda_d"][0]
@@ -246,8 +257,8 @@ class SimulatorDistr:
         self.calculate_centroid()
         self.calculate_covariance()
 
-        # Compute the GVF omega control law
-        self.cfc()
+        # Compute the control law
+        self.control_dfc()
 
         # Integrate (single integrator dynamics)
         self.variables["t"] = self.variables["t"] + self.dt
