@@ -8,7 +8,7 @@
     }
 
 ## Features
-This project includes a centralized and distribution implementation of our Dispersion Formation Control algorithm.
+This project includes both centralized and distributed implementations of our Dispersion Formation Control algorithm.
 
 ## Quick Install
 
