@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 # Swarm Systems Lab PySimUtils
 from ssl_pysimutils import vector2d, set_paper_parameters
 
+__all__ = ["plot_basic"]
 
 def plot_basic(
     sim,

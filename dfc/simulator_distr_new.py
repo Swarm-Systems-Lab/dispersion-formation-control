@@ -9,17 +9,19 @@ from scipy.integrate import odeint
 # SSL utils
 from ssl_pysimutils import build_B, build_L_from_B
 
+# --------------------------------------------------------------------------------------
 
 # Consensus dynamics
 def dyn_dual(xhat, L, x, k=1):
     xhat_dt = -k * (L.dot(xhat) - L.dot(x))
     return xhat_dt
 
-
 # --------------------------------------------------------------------------------------
 
 # [!!] Calculations aren't very efficient, but these algorithms are first implemented 
 # in Python for simulations and then ported to C for experiments in Paparazzi UAV
+
+__all__ = ["SimulatorDistrNew"]
 
 class SimulatorDistrNew:
     def __init__(

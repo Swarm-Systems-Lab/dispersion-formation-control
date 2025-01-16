@@ -24,6 +24,7 @@ from ssl_pysimutils import config_data_axis, vector2d
 
 # -------------------------------------------------------------------------------------
 
+__all__ = ["Animation"]
 
 class Animation:
     def __init__(

@@ -21,6 +21,7 @@ from ..simulator import Simulator
 
 # -------------------------------------------------------------------------------------
 
+__all__ = ["AnimBasic"]
 
 class AnimBasic:
     def __init__(

@@ -12,6 +12,7 @@ from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 # Swarm Systems Lab PySimUtils
 from ssl_pysimutils import config_data_axis, vector2d, set_paper_parameters
 
+__all__ = ["plot_distributed_small"]
 
 def plot_distributed_small(
     sim,

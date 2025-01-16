@@ -22,11 +22,8 @@ module_path = os.path.join(file_path, "..")
 if module_path not in sys.path:
     sys.path.append(module_path)
 
-# Import simulators, plots and animations
-from dfc import Simulator, SimulatorDistr, SimulatorDistrNew
-from dfc.plots import plot_centralized, plot_distributed, plot_resilience_osc, plot_resilience_kill
-from dfc.plots import plot_distributed_small, plot_resilience_small
-from dfc.animations import AnimBasic
+# Import the main module of the project
+import dfc as dfc
 
 # --------------------------------------------------------------------------------------
 

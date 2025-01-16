@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 # Swarm Systems Lab PySimUtils
 from ssl_pysimutils import config_data_axis, vector2d, set_paper_parameters
 
+__all__ = ["plot_resilience_small"]
 
 def plot_resilience_small(
     sim,

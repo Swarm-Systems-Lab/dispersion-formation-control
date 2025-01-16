@@ -6,9 +6,10 @@ import numpy as np
 
 # --------------------------------------------------------------------------------------
 
-# [!!] The calculations are not the most efficient, but these algorithms are thought to
-# be implemented in C into Paparazzi UAV.
+# [!!] Calculations aren't very efficient, but these algorithms are first implemented 
+# in Python for simulations and then ported to C for experiments in Paparazzi UAV
 
+__all__ = ["Simulator"]
 
 class Simulator:
     def __init__(
