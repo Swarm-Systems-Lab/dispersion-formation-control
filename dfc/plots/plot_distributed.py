@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
 # Swarm Systems Lab PySimUtils
-from ssl_pysimutils import config_data_axis, vector2d, set_paper_parameters
+from ssl_simulator.visualization import config_data_axis, vector2d
 
 __all__ = ["plot_distributed"]
 
@@ -23,8 +23,6 @@ def plot_distributed(
     tc=0,
     colors=["royalblue", "darkgreen", "darkred"],
 ):
-    # Configure matplotlib for paper figures --
-    set_paper_parameters()
 
     # ------------------------------
     # Read simulation data

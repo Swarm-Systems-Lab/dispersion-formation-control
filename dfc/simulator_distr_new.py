@@ -7,7 +7,7 @@ import numpy as np
 from scipy.integrate import odeint
 
 # SSL utils
-from ssl_pysimutils import build_B, build_L_from_B
+from ssl_simulator.math import build_B, build_L_from_B
 
 # --------------------------------------------------------------------------------------
 

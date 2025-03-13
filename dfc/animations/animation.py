@@ -20,7 +20,7 @@ from matplotlib.animation import FuncAnimation
 # -------------------------------------------------------------------------------------
 
 # Swarm Systems Lab PySimUtils
-from ssl_pysimutils import config_data_axis, vector2d
+from ssl_simulator.visualization import config_data_axis, vector2d
 
 # -------------------------------------------------------------------------------------
 
