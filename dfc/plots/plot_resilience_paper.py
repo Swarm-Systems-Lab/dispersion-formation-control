@@ -16,12 +16,13 @@ __all__ = ["plot_resilience_paper"]
 
 def plot_resilience_paper(
     sim,
-    lim=11,
+    limx=11,
     li=None,
     dpi=100,
     figsize=(13, 7),
     colors=["royalblue", "darkgreen", "darkred"],
     t_sep=0.5,
+    title=""
 ):
 
     # ------------------------------
@@ -43,43 +44,39 @@ def plot_resilience_paper(
 
     # ------------------------------
 
-    # print(p_data.shape)
-
     # ------------------------------
     # Initialise the figure + axes
     fig = plt.figure(dpi=dpi, figsize=figsize)
-    grid = plt.GridSpec(3, 6, hspace=0.3, wspace=0.4)
+    grid = plt.GridSpec(3, 6, hspace=0.4, wspace=0.4)
     ax_main = fig.add_subplot(grid[0:2, 0:4])
     ax_data1 = fig.add_subplot(grid[0, 4:6])
     ax_data2 = fig.add_subplot(grid[1, 4:6])
     ax_data3 = fig.add_subplot(grid[2, 4:6])
     ax_data4 = fig.add_subplot(grid[2, 0:2])
     ax_data5 = fig.add_subplot(grid[2, 2:4])
-
+    
+    ax_main.set_title(title)
+    
     # Configure the axes
-    ax_main.set_xlim([-lim, lim])
-    # ax_main.set_ylim([-lim*2/3, lim*2/3])
+    ax_main.set_xlim([-limx, limx])
+    # ax_main.set_ylim([-limy, limy])
 
     ax_main.set_xlabel(r"$p_x$ [L]")
     ax_main.set_ylabel(r"$p_y$  [L]")
     ax_main.set_aspect("equal")
-    config_data_axis(ax_main, 2, 2, False)
 
     ax_data1.set_ylabel(r"$\|e_\lambda\|^2$")
-    config_data_axis(ax_data1, t_sep, 20)
 
     ax_data2.set_ylabel(r"$p_i$ [L]")
-    config_data_axis(ax_data2, t_sep, 1)
 
     ax_data3.set_xlabel(r"$t$ [T]")
     ax_data3.set_ylabel(r"[L$^2$]")
-    config_data_axis(ax_data3, t_sep, 5)
 
-    ax_data4.set_xlabel(r"$t$ [T]")
-    config_data_axis(ax_data4, t_sep, 5, False)
-    
+    ax_data4.set_xlabel(r"$t$ [T]") 
+
     ax_data5.set_xlabel(r"$t$ [T]")
-    config_data_axis(ax_data5, t_sep, 2, False)
+
+    # ------------------------------
 
     # ------------------------------
     # MAIN AXIS
@@ -93,6 +90,7 @@ def plot_resilience_paper(
         ax_main.plot(p_data[0, :, 0], p_data[0, :, 1], ".g")
         ax_main.plot(p_data[li, :, 0], p_data[li, :, 1], ".r")
         ax_main.plot(p_data[0 : li + 1, 0, 0], p_data[0 : li + 1, 0, 1], "--k", lw=1)
+    config_data_axis(ax_main, 2, 2, False)
 
     # Eigenvectors
     kw_arr = {"zorder": 5, "lw": 1, "hw": 0.3, "hl": 0.5}
@@ -113,15 +111,15 @@ def plot_resilience_paper(
 
     ax_main.text(
         v1_data_alive[-1, 0, 0] * lambda_data_alive[-1, 0, 0],
-        v1_data_alive[-1, 0, 1] * lambda_data_alive[-1, 0, 0],
-        r"$l_1$",
+        v1_data_alive[-1, 0, 1] * lambda_data_alive[-1, 0, 0]+0.3,
+        r"$l_1^f$",
         c="k",
     )
 
     ax_main.text(
-        v2_data_alive[-1, 0, 0] * lambda_data_alive[-1, 0, 1] + 0.4,
-        v2_data_alive[-1, 0, 1] * lambda_data_alive[-1, 0, 1] + 0.5,
-        r"$l_2$",
+        v2_data_alive[-1, 0, 0] * lambda_data_alive[-1, 0, 1] + 0.2,
+        v2_data_alive[-1, 0, 1] * lambda_data_alive[-1, 0, 1] - 0.4,
+        r"$l_2^f$",
         c="k",
     )
 
@@ -132,6 +130,7 @@ def plot_resilience_paper(
     # DATA AXIS 1
     ax_data1.axhline(0, color="k", ls="-", lw=1)
     ax_data1.plot(t_data, np.linalg.norm(e_data, axis=2) ** 2, "r", alpha=0.05)
+    config_data_axis(ax_data1, t_sep, 20)
 
     # ------------------------------
     # DATA AXIS 2
@@ -139,8 +138,11 @@ def plot_resilience_paper(
     ax_data2.plot(t_data, pc_data[:, :, 0], colors[0], alpha=0.05)
     ax_data2.plot(t_data, pc_data[:, :, 1], colors[2], alpha=0.05)
 
-    ax_data2.plot([None], [None], colors[0], label=r"$\hat{p}_c^X$")
-    ax_data2.plot([None], [None], colors[2], label=r"$\hat{p}_c^Y$")
+    config_data_axis(ax_data2, t_sep, 1)
+
+    # legend
+    ax_data2.plot([None], [None], colors[0], label=r"$\hat{p}_c^i$"+r"${}^X$")
+    ax_data2.plot([None], [None], colors[2], label=r"$\hat{p}_c^i$"+r"${}^Y$")
     ax_data2.legend(fancybox=True, prop={"size": 10}, ncols=2, loc="lower right")
 
     # ------------------------------
@@ -153,13 +155,18 @@ def plot_resilience_paper(
     ax_data3.plot(t_data, C_data[:, :, 0, 1], colors[1], alpha=0.05)
     ax_data3.plot(t_data, C_data[:, :, 1, 1], colors[2], alpha=0.05)
 
-    ax_data3.plot(t_data, C_data[:, 0, 0, 0] - 100, colors[0], label=r"$\hat c_1$")
-    ax_data3.plot(t_data, C_data[:, 0, 0, 1] - 100, colors[1], label=r"$\hat c_2$")
-    ax_data3.plot(t_data, C_data[:, 0, 1, 1] - 100, colors[2], label=r"$\hat c_3$")
-    ax_data3.legend(fancybox=True, prop={"size": 10}, ncols=3, loc="upper center")
+    config_data_axis(ax_data3, t_sep, 5)
 
+    # legend
+    ax_data3.plot(t_data, C_data[:, 0, 0, 0] - 100, colors[0], label=r"$\hat c^i_1$")
+    ax_data3.plot(t_data, C_data[:, 0, 0, 1] - 100, colors[1], label=r"$\hat c^i_2$")
+    ax_data3.plot(t_data, C_data[:, 0, 1, 1] - 100, colors[2], label=r"$\hat c^i_3$")
+    ax_data3.legend(fancybox=True, prop={"size": 10}, ncols=3, loc="upper center")
+    
     # ------------------------------
+
     perc_l, perc_u = 0.2, 0.8
+    
     # ------------------------------
     # DATA AXIS 4
 
@@ -179,19 +186,21 @@ def plot_resilience_paper(
     ax_data4.text(
         t_data[-1] - 0.2,
         v1_data_alive[-1,0,0]*lambda_data_alive[-1,0,0] + dist*0.14,
-        r"$l_1^X$",
+        r"${l_1^f}^X$",
         c="k",
     )
     ax_data4.text(
         t_data[-1] - 0.2,
         v1_data_alive[-1,0,1]*lambda_data_alive[-1,0,0] + dist*0.14,
-        r"$l_1^Y$",
+        r"${l_1^f}^Y$",
         c="k",
     )
 
+    config_data_axis(ax_data4, t_sep, 5, False)
+
     # legend
-    ax_data4.plot([None], [None], colors[0], label=r"${l_i^1}^X$")
-    ax_data4.plot([None], [None], colors[2], label=r"${l_i^1}^Y$")
+    ax_data4.plot([None], [None], colors[0], label=r"${l_1^i}^X$")
+    ax_data4.plot([None], [None], colors[2], label=r"${l_1^i}^Y$")
     ax_data4.legend(fancybox=True, prop={"size": 10}, ncols=2, loc="upper left")
 
     # ------------------------------
@@ -213,19 +222,21 @@ def plot_resilience_paper(
     ax_data5.text(
         t_data[-1] - 0.2,
         v2_data_alive[-1,0,0]*lambda_data_alive[-1,0,1] + dist*0.13,
-        r"$l_2^X$",
+        r"${l_2^f}^X$",
         c="k",
     )
     ax_data5.text(
         t_data[-1] - 0.2,
         v2_data_alive[-1,0,1]*lambda_data_alive[-1,0,1] + dist*0.13,
-        r"$l_2^Y$",
+        r"${l_2^f}^Y$",
         c="k",
     )
 
+    config_data_axis(ax_data5, t_sep, 2, False)
+
     # legend
-    ax_data5.plot([None], [None], colors[0], label=r"${l_i^2}^X$")
-    ax_data5.plot([None], [None], colors[2], label=r"${l_i^2}^Y$")
+    ax_data5.plot([None], [None], colors[0], label=r"${l_2^i}^X$")
+    ax_data5.plot([None], [None], colors[2], label=r"${l_2^i}^Y$")
     ax_data5.legend(fancybox=True, prop={"size": 10}, ncols=2, loc="upper left")
 
     # Plot it!
