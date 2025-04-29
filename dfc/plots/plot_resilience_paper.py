@@ -1,5 +1,5 @@
 """\
-# Copyright (C) 2024 Jesús Bautista Villar <jesbauti20@gmail.com>
+# Jesús Bautista Villar <jesbauti20@gmail.com>
 """
 
 # Math tools
@@ -9,7 +9,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
-# Swarm Systems Lab PySimUtils
+# Import visualization tools and GVF trajectory from the Swarm Systems Lab Simulator
 from ssl_simulator.visualization import config_data_axis, vector2d
 
 __all__ = ["plot_resilience_paper"]
@@ -38,6 +38,7 @@ def plot_resilience_paper(
     C_data = np.array(sim.data["C"])
 
     status_final = sim.status
+    status_dyn = sim.status_dyn
     v1_data_alive = v1_data[:, status_final==1, :]
     v2_data_alive = v2_data[:, status_final==1, :]
     lambda_data_alive = lambda_data[:, status_final==1, :]
@@ -83,9 +84,18 @@ def plot_resilience_paper(
     if li is None:
         ax_main.scatter(p_data[0, :, 0], p_data[0, :, 1], s=20, facecolor="g", edgecolors="none", alpha=0.8, zorder=3, label="Initial state")
         ax_main.scatter(p_data[-1, status_final==1, 0], p_data[-1, status_final==1, 1], s=20, facecolor="r", edgecolors="none", zorder=4, label="Final state\n (alive units)")
-        ax_main.scatter(p_data[-1, status_final==0, 0], p_data[-1, status_final==0, 1], s=20, facecolor="darkred", zorder=4, marker="x", label="Final state\n (dead units)")
+        if np.any(np.logical_not(status_final)):
+            ax_main.scatter(p_data[-1, status_final==0, 0], p_data[-1, status_final==0, 1], s=20, facecolor="darkred", zorder=4, marker="x", label="Final state\n (dead units)")
+        if np.any(np.logical_not(status_dyn)):
+            ax_main.scatter(p_data[-1, status_dyn==0, 0], p_data[-1, status_dyn==0, 1], s=20, facecolor="black", edgecolors="none", zorder=4, label="Final state\n (rot. units)")
+        
+        # plot
         for i in range(sim.N):
-            ax_main.plot(p_data[:, i, 0], p_data[:, i, 1], "-r", lw=0.8, alpha=0.3)
+            if status_dyn[i] == 1:
+                ax_main.plot(p_data[:, i, 0], p_data[:, i, 1], "-r", lw=0.8, alpha=0.3)
+            else:
+                ax_main.plot(p_data[:, i, 0], p_data[:, i, 1], "-k", lw=0.8, alpha=0.3)
+
     else:
         ax_main.plot(p_data[0, :, 0], p_data[0, :, 1], ".g")
         ax_main.plot(p_data[li, :, 0], p_data[li, :, 1], ".r")
@@ -136,8 +146,10 @@ def plot_resilience_paper(
     # DATA AXIS 2
 
     ax_data2.axhline(0, color="k", ls="-", lw=1)
-    ax_data2.plot(t_data, p_data[:, :, 0], colors[0], alpha=0.05)
-    ax_data2.plot(t_data, p_data[:, :, 1], colors[2], alpha=0.05)
+    ax_data2.plot(t_data, p_data[:, status_dyn==1, 0], colors[0], alpha=0.05)
+    ax_data2.plot(t_data, p_data[:, status_dyn==1, 1], colors[2], alpha=0.05)
+    ax_data2.plot(t_data, p_data[:, status_dyn==0, 0], colors[0], alpha=0.5)
+    ax_data2.plot(t_data, p_data[:, status_dyn==0, 1], colors[2], alpha=0.5)
 
     config_data_axis(ax_data2, t_sep, 2)
 

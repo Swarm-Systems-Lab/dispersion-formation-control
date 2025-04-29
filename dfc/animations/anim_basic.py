@@ -1,5 +1,5 @@
 """
-# Copyright (C) 2024 Jesús Bautista Villar <jesbauti20@gmail.com>
+# Jesús Bautista Villar <jesbauti20@gmail.com>
 """
 
 import numpy as np
@@ -14,7 +14,7 @@ from matplotlib.animation import FuncAnimation
 
 # -------------------------------------------------------------------------------------
 
-# Swarm Systems Lab PySimUtils
+# Import visualization tools and GVF trajectory from the Swarm Systems Lab Simulator
 from ssl_simulator.visualization import config_data_axis, vector2d
 
 from ..simulator import Simulator

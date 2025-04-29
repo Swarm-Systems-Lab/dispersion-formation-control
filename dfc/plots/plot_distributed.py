@@ -1,5 +1,5 @@
 """\
-# Copyright (C) 2024 Jesús Bautista Villar <jesbauti20@gmail.com>
+# Jesús Bautista Villar <jesbauti20@gmail.com>
 """
 
 # Math tools
@@ -9,7 +9,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
-# Swarm Systems Lab PySimUtils
+# Import visualization tools and GVF trajectory from the Swarm Systems Lab Simulator
 from ssl_simulator.visualization import config_data_axis, vector2d
 
 __all__ = ["plot_distributed"]

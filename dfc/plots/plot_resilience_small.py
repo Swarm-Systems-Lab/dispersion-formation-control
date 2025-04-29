@@ -1,5 +1,5 @@
 """\
-# Copyright (C) 2024 Jesús Bautista Villar <jesbauti20@gmail.com>
+# Jesús Bautista Villar <jesbauti20@gmail.com>
 """
 
 # Math tools
@@ -8,7 +8,7 @@ import numpy as np
 # Graphic tools
 import matplotlib.pyplot as plt
 
-# Swarm Systems Lab PySimUtils
+# Import visualization tools and GVF trajectory from the Swarm Systems Lab Simulator
 from ssl_simulator.visualization import config_data_axis, vector2d
 
 __all__ = ["plot_resilience_small"]

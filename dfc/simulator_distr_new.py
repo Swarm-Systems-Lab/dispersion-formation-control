@@ -1,5 +1,5 @@
 """\
-# Copyright (C) 2024 Jesús Bautista Villar <jesbauti20@gmail.com>
+# Jesús Bautista Villar <jesbauti20@gmail.com>
 """
 
 import numpy as np
@@ -43,6 +43,7 @@ class SimulatorDistrNew:
         self.N = p0.shape[0]
         self.Z = Z
         self.status = np.ones(self.N)
+        self.status_dyn = np.ones(self.N)
         
         # Generate the initial incidence and Laplacian matrices 
         self.B = build_B(self.Z, self.N)
@@ -184,7 +185,7 @@ class SimulatorDistrNew:
         # flag = self.variables["t"] > self.t0
 
         for i in range(self.N):
-            if self.status[i] == 1:
+            if self.status[i] == 1 and self.status_dyn[i] == 1:
                 # Get data
                 Ci = self.variables["Ci"][i,:,:]
                 C_hat = self.variables["C_hat"][i, :, :]
