@@ -9,8 +9,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
-# Import visualization tools and GVF trajectory from the Swarm Systems Lab Simulator
-from ssl_simulator.visualization import config_data_axis, vector2d
+# Import visualization tools from the Swarm Systems Lab Simulator
+from ssl_simulator.visualization import config_axis, vector2d
 
 __all__ = ["plot_distributed_small"]
 
@@ -51,11 +51,11 @@ def plot_distributed_small(
     ax_main.set_xlabel(r"$p_x$ [L]")
     ax_main.set_ylabel(r"$p_y$  [L]")
     ax_main.set_aspect("equal")
-    config_data_axis(ax_main, 2.5, 2.5, False)
+    config_axis(ax_main, 2.5, 2.5)
 
     ax_data.set_ylabel(r"$\|e_\lambda\|^2$")
     ax_data.set_xlabel(r"$t$ [T]")
-    config_data_axis(ax_data, 0.5, 10)
+    config_axis(ax_data, 0.5, 10)
 
     # ------------------------------
     # MAIN AXIS

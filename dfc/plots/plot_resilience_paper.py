@@ -9,8 +9,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
-# Import visualization tools and GVF trajectory from the Swarm Systems Lab Simulator
-from ssl_simulator.visualization import config_data_axis, vector2d
+# Import visualization tools from the Swarm Systems Lab Simulator
+from ssl_simulator.visualization import config_axis, vector2d
 
 __all__ = ["plot_resilience_paper"]
 
@@ -48,7 +48,7 @@ def plot_resilience_paper(
     # ------------------------------
     # Initialise the figure + axes
     fig = plt.figure(dpi=dpi, figsize=figsize)
-    grid = plt.GridSpec(4, 6, hspace=0.4, wspace=0.4)
+    grid = plt.GridSpec(4, 6, hspace=0.4, wspace=0.8)
     ax_main = fig.add_subplot(grid[0:3, 0:4])
     ax_data1 = fig.add_subplot(grid[0, 4:6])
     ax_data2 = fig.add_subplot(grid[1, 4:6])
@@ -100,7 +100,7 @@ def plot_resilience_paper(
         ax_main.plot(p_data[0, :, 0], p_data[0, :, 1], ".g")
         ax_main.plot(p_data[li, :, 0], p_data[li, :, 1], ".r")
         ax_main.plot(p_data[0 : li + 1, 0, 0], p_data[0 : li + 1, 0, 1], "--k", lw=1)
-    config_data_axis(ax_main, 2, 2, False)
+    config_axis(ax_main, 2, 2)
 
     # Eigenvectors
     kw_arr = {"zorder": 5, "lw": 1, "hw": 0.3, "hl": 0.5}
@@ -140,7 +140,7 @@ def plot_resilience_paper(
     # DATA AXIS 1
     ax_data1.axhline(0, color="k", ls="-", lw=1)
     ax_data1.plot(t_data, np.linalg.norm(e_data, axis=2), "r", alpha=0.05)
-    config_data_axis(ax_data1, t_sep, 2)
+    config_axis(ax_data1, t_sep, 2)
 
     # ------------------------------
     # DATA AXIS 2
@@ -151,7 +151,7 @@ def plot_resilience_paper(
     ax_data2.plot(t_data, p_data[:, status_dyn==0, 0], colors[0], alpha=0.5)
     ax_data2.plot(t_data, p_data[:, status_dyn==0, 1], colors[2], alpha=0.5)
 
-    config_data_axis(ax_data2, t_sep, 2)
+    config_axis(ax_data2, t_sep, 2)
 
     # legend
     ax_data2.plot([None], [None], colors[0], label=r"$p_i$"+r"${}^X$")
@@ -164,7 +164,7 @@ def plot_resilience_paper(
     ax_data3.plot(t_data, pc_data[:, :, 0], colors[0], alpha=0.05)
     ax_data3.plot(t_data, pc_data[:, :, 1], colors[2], alpha=0.05)
 
-    config_data_axis(ax_data3, t_sep, 1)
+    config_axis(ax_data3, t_sep, 1)
 
     # legend
     ax_data3.plot([None], [None], colors[0], label=r"$\hat{p}_c^i$"+r"${}^X$")
@@ -181,7 +181,7 @@ def plot_resilience_paper(
     ax_data4.plot(t_data, C_data[:, :, 0, 1], colors[1], alpha=0.05)
     ax_data4.plot(t_data, C_data[:, :, 1, 1], colors[2], alpha=0.05)
 
-    config_data_axis(ax_data4, t_sep, 5)
+    config_axis(ax_data4, t_sep, 5)
 
     # legend
     ax_data4.plot(t_data, C_data[:, 0, 0, 0] - 100, colors[0], label=r"$\hat c^i_1$")
@@ -222,7 +222,7 @@ def plot_resilience_paper(
         c="k",
     )
 
-    config_data_axis(ax_data5, t_sep, 5, False)
+    config_axis(ax_data5, t_sep, 5)
 
     # legend
     ax_data5.plot([None], [None], colors[0], label=r"${l_1^i}^X$")
@@ -258,7 +258,7 @@ def plot_resilience_paper(
         c="k",
     )
 
-    config_data_axis(ax_data6, t_sep, 2, False)
+    config_axis(ax_data6, t_sep, 2)
 
     # legend
     ax_data6.plot([None], [None], colors[0], label=r"${l_2^i}^X$")

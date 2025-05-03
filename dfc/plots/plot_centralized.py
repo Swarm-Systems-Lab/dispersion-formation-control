@@ -8,8 +8,8 @@ import numpy as np
 # Graphic tools
 import matplotlib.pyplot as plt
 
-# Import visualization tools and GVF trajectory from the Swarm Systems Lab Simulator
-from ssl_simulator.visualization import config_data_axis, vector2d
+# Import visualization tools from the Swarm Systems Lab Simulator
+from ssl_simulator.visualization import config_axis, vector2d
 
 __all__ = ["plot_centralized"]
 
@@ -50,14 +50,14 @@ def plot_centralized(
     ax_main.set_xlabel(r"$X$ [L]")
     ax_main.set_ylabel(r"$Y$  [L]")
     ax_main.set_aspect("equal")
-    config_data_axis(ax_main, 2.5, 2.5, False)
+    config_axis(ax_main, 2.5, 2.5)
 
     ax_data1.set_ylabel(r"$\|e_\lambda\|^2$")
-    config_data_axis(ax_data1, t_sep, 15)
+    config_axis(ax_data1, t_sep, 15)
 
     ax_data3.set_xlabel(r"$t$ [T]")
     ax_data3.set_ylabel(r"[L$^2$]")
-    config_data_axis(ax_data3, t_sep, 2)
+    config_axis(ax_data3, t_sep, 2)
 
     # ------------------------------
     # MAIN AXIS

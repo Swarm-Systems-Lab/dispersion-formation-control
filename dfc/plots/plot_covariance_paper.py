@@ -9,9 +9,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
-# Import visualization tools and GVF trajectory from the Swarm Systems Lab Simulator
+# Import visualization tools from the Swarm Systems Lab Simulator
 from ssl_simulator import parse_kwargs
-from ssl_simulator.visualization import config_data_axis, vector2d
+from ssl_simulator.visualization import config_axis
 
 __all__ = ["plot_covariance_paper"]
 
@@ -24,7 +24,6 @@ def plot_covariance_paper(distrs, colors=["royalblue", "darkred", "darkgreen"], 
     }
 
     kw_ax = {
-        "y_right": False,
         "xlims": None,
         "ylims": None,
         "max_major_ticks": 6,
@@ -47,7 +46,7 @@ def plot_covariance_paper(distrs, colors=["royalblue", "darkred", "darkgreen"], 
     ax.set_xlabel(r"$X$ [L]")
     ax.set_ylabel(r"$Y$ [L]")
     ax.set_aspect("equal")
-    config_data_axis(ax, **kw_ax)
+    config_axis(ax, **kw_ax)
 
     # ---------------------------------------------------------------------------------
     # MAIN AXIS

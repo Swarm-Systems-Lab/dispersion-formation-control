@@ -8,8 +8,8 @@ import numpy as np
 # Graphic tools
 import matplotlib.pyplot as plt
 
-# Import visualization tools and GVF trajectory from the Swarm Systems Lab Simulator
-from ssl_simulator.visualization import config_data_axis, vector2d
+# Import visualization tools from the Swarm Systems Lab Simulator
+from ssl_simulator.visualization import config_axis, vector2d
 
 __all__ = ["plot_basic"]
 
@@ -20,9 +20,6 @@ def plot_basic(
     dpi=100,
     figsize=(13, 7),
 ):
-
-    # Configure matplotlib for paper figures --
-    set_paper_parameters()
 
     # ------------------------------
     # Read simulation data
@@ -35,7 +32,7 @@ def plot_basic(
     # ------------------------------
     # Initialise the figure + axes
     fig = plt.figure(dpi=dpi, figsize=figsize)
-    grid = plt.GridSpec(2, 2, hspace=0.4, wspace=0.1)
+    grid = plt.GridSpec(2, 2, hspace=0.4, wspace=0.4)
     ax_main = fig.add_subplot(grid[:, :])
 
     # Configure the axes

@@ -9,8 +9,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
-# Import visualization tools and GVF trajectory from the Swarm Systems Lab Simulator
-from ssl_simulator.visualization import config_data_axis, vector2d
+# Import visualization tools from the Swarm Systems Lab Simulator
+from ssl_simulator.visualization import config_axis, vector2d
 
 __all__ = ["plot_distributed"]
 
@@ -59,18 +59,18 @@ def plot_distributed(
     ax_main.set_xlabel(r"$p_x$ [L]")
     ax_main.set_ylabel(r"$p_y$  [L]")
     ax_main.set_aspect("equal")
-    config_data_axis(ax_main, 2.5, 2.5, False)
+    config_axis(ax_main, 2.5, 2.5)
 
     ax_data1.set_ylabel(r"$\|e_\lambda\|^2$")
-    config_data_axis(ax_data1, 0.5, 20)
+    config_axis(ax_data1, 0.5, 20)
 
     ax_data2.set_ylim([-1, lim])
     ax_data2.set_ylabel(r"$\hat{p}_c^i$ [L]")
-    config_data_axis(ax_data2, 0.5, 2.5)
+    config_axis(ax_data2, 0.5, 2.5)
 
     ax_data3.set_xlabel(r"$t$ [T]")
     ax_data3.set_ylabel(r"$\hat{c}_k^i$ [L$^2$]")
-    config_data_axis(ax_data3, 0.5, 10)
+    config_axis(ax_data3, 0.5, 10)
 
     # ------------------------------
     # MAIN AXIS
@@ -151,7 +151,7 @@ def plot_distributed(
 
     ax_inset2.set_xlabel(r"[mT]")
     ax_inset2.xaxis.set_label_coords(1.12, -0.16)
-    config_data_axis(ax_inset2, 1, 2)
+    config_axis(ax_inset2, 1, 2)
 
     tpc = sim.tpc / (sim.its_pc) * sim.dt * 1000
     ax_inset2.plot(tpc, pcx_log, colors[0], alpha=0.2)
@@ -177,7 +177,7 @@ def plot_distributed(
 
     ax_inset3.set_xlabel(r"[mT]")
     ax_inset3.xaxis.set_label_coords(1.12, -0.16)
-    config_data_axis(ax_inset3, 1, 2)
+    config_axis(ax_inset3, 1, 2)
 
     tc = sim.tc / (sim.its_c) * sim.dt * 1000
     ax_inset3.plot(tc, c1_log_data, c=colors[0], alpha=0.3)

@@ -20,7 +20,7 @@ from matplotlib.animation import FuncAnimation
 # -------------------------------------------------------------------------------------
 
 # Import visualization tools and GVF trajectory from the Swarm Systems Lab Simulator
-from ssl_simulator.visualization import config_data_axis, vector2d
+from ssl_simulator.visualization import config_axis, vector2d
 
 # -------------------------------------------------------------------------------------
 
@@ -83,18 +83,18 @@ class Animation:
         ax_main.set_xlabel(r"$X$ [L]")
         ax_main.set_ylabel(r"$Y$  [L]")
         ax_main.set_aspect("equal")
-        config_data_axis(ax_main, 2.5, 2.5, False)
+        config_axis(ax_main, 2.5, 2.5)
 
         ax_data1.set_xlabel(r"$t$ [T]")
         ax_data1.set_ylabel(r"$\|e_\lambda\|^2$")
-        config_data_axis(ax_data1, 0.5, 25)
+        config_axis(ax_data1, 0.5, 25)
 
         ax_data2.set_ylabel(r"$a$")
-        config_data_axis(ax_data2, 0.5, 5)
+        config_axis(ax_data2, 0.5, 5)
 
         ax_data3.set_xlabel(r"$t$ [T]")
         ax_data3.set_ylabel(r"$a$")
-        config_data_axis(ax_data3, 0.5, 5)
+        config_axis(ax_data3, 0.5, 5)
 
         # xmin, xmax = np.min([-0.2, np.min(self.tdata) - 0.2]), np.max(
         #     [0.2, np.max(self.tdata) + 0.2]

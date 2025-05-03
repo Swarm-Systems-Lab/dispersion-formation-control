@@ -15,7 +15,7 @@ from matplotlib.animation import FuncAnimation
 # -------------------------------------------------------------------------------------
 
 # Import visualization tools and GVF trajectory from the Swarm Systems Lab Simulator
-from ssl_simulator.visualization import config_data_axis, vector2d
+from ssl_simulator.visualization import config_axis, vector2d
 
 from ..simulator import Simulator
 
