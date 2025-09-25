@@ -1,10 +1,18 @@
 # Dispersion Formation Control: from Geometry to Distribution
 
+## Research paper
+
+**ABSTRACT:** We introduce and develop the concept of dispersion formation control, bridging a gap between shape-assembly studies
+in physics and biology and formation control theory. In current formation control studies, the control objectives typically focus
+on achieving desired local geometric properties, such as interagent distances, bearings, or relative positions. In contrast, our dispersion formation control approach enables agents to directly regulate the dispersion of their spatial distribution, a global variable associated with a covariance matrix. Specifically, we introduce the notion of covariance similarity to define the
+target spatial dispersion of agents. Building on this framework, we propose two control strategies: a centralized approach to
+illustrate the key ideas, and a distributed approach that enables agents to control the global dispersion but using only local information. Our stability analysis demonstrates that both strategies ensure exponential convergence of the agents’ distribution to the desired dispersion. Notably, controlling a global variable rather than multiple local ones enhances the resiliency of the system, particularly against malfunctioning agents. Simulations validate the effectiveness of the proposed dispersion formation control.
+
     @misc{jinchen2024cloudformationcontrol,
       title={Dispersion Formation Control: from Geometry to Distribution}, 
-      author={Jin Chen, Hector Garcia de Marina, Jesus Bautista Villar, Bayu Jayawardhana},
+      author={Jin Chen, Jesus Bautista Villar, Hector Garcia de Marina, Bayu Jayawardhana},
       year={2024},
-      url={}, 
+      url={https://arxiv.org/abs/2509.19784}, 
     }
 
 ## Features
