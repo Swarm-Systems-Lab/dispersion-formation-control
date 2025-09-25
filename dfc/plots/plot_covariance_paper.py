@@ -15,7 +15,7 @@ from ssl_simulator.visualization import config_axis
 
 __all__ = ["plot_covariance_paper"]
 
-def plot_covariance_paper(distrs, colors=["royalblue", "darkred", "darkgreen"], **kwargs):
+def plot_covariance_paper(distrs, colors=["royalblue", "darkred", "darkgreen", "purple"], **kwargs):
 
     # Default visual properties
     kw_fig = {
